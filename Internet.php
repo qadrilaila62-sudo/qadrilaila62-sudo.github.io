@@ -1,9 +1,10 @@
 <?php
 
-namespace Faker\Provider\kk_KZ;
+namespace Faker\Provider\sl_SI;
 
 class Internet extends \Faker\Provider\Internet
 {
-    protected static $freeEmailDomain = ['mail.kz', 'yandex.kz', 'host.kz'];
-    protected static $tld = ['com', 'com', 'net', 'org', 'kz', 'kz', 'kz', 'kz'];
+    protected static $freeEmailDomain = ['gmail.com', 'gmail.com', 'gmail.com', 'hotmail.com', 'yahoo.com', 'siol.net', 't-2.net'];
+
+    protected static $tld = ['si', 'si', 'si', 'si', 'eu', 'com', 'info', 'net', 'org'];
 }
