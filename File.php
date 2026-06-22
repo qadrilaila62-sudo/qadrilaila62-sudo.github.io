@@ -1,15 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace Faker\Provider;
 
-namespace Faker\Core;
-
-use Faker\Extension;
-
-/**
- * @experimental This class is experimental and does not fall under our BC promise
- */
-final class File implements Extension\FileExtension
+class File extends Base
 {
     /**
      * MIME types from the apache.org file. Some types are truncated.
@@ -18,7 +11,7 @@ final class File implements Extension\FileExtension
      *
      * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
-    private array $mimeTypes = [
+    protected static $mimeTypes = [
         'application/atom+xml' => 'atom',
         'application/ecmascript' => 'ecma',
         'application/emma+xml' => 'emma',
@@ -545,20 +538,73 @@ final class File implements Extension\FileExtension
         'video/x-sgi-movie' => 'movie',
     ];
 
-    public function mimeType(): string
+    /**
+     * Get a random MIME type
+     *
+     * @return string
+     *
+     * @example 'video/avi'
+     */
+    public static function mimeType()
     {
-        return array_rand($this->mimeTypes, 1);
+        return static::randomElement(array_keys(static::$mimeTypes));
     }
 
-    public function extension(): string
+    /**
+     * Get a random file extension (without a dot)
+     *
+     * @example avi
+     *
+     * @return string
+     */
+    public static function fileExtension()
     {
-        $extension = $this->mimeTypes[array_rand($this->mimeTypes, 1)];
+        $random_extension = static::randomElement(array_values(static::$mimeTypes));
 
-        return is_array($extension) ? $extension[array_rand($extension, 1)] : $extension;
+        return is_array($random_extension) ? static::randomElement($random_extension) : $random_extension;
     }
 
-    public function filePath(): string
+    /**
+     * Copy a random file from the source directory to the target directory and returns the filename/fullpath
+     *
+     * @param string $sourceDirectory The directory to look for random file taking
+     * @param string $targetDirectory
+     * @param bool   $fullPath        Whether to have the full path or just the filename
+     *
+     * @return string
+     */
+    public static function file($sourceDirectory = '/tmp', $targetDirectory = '/tmp', $fullPath = true)
     {
-        return tempnam(sys_get_temp_dir(), 'faker');
+        if (!is_dir($sourceDirectory)) {
+            throw new \InvalidArgumentException(sprintf('Source directory %s does not exist or is not a directory.', $sourceDirectory));
+        }
+
+        if (!is_dir($targetDirectory)) {
+            throw new \InvalidArgumentException(sprintf('Target directory %s does not exist or is not a directory.', $targetDirectory));
+        }
+
+        if ($sourceDirectory == $targetDirectory) {
+            throw new \InvalidArgumentException('Source and target directories must differ.');
+        }
+
+        // Drop . and .. and reset array keys
+        $files = array_filter(array_values(array_diff(scandir($sourceDirectory), ['.', '..'])), static function ($file) use ($sourceDirectory) {
+            return is_file($sourceDirectory . DIRECTORY_SEPARATOR . $file) && is_readable($sourceDirectory . DIRECTORY_SEPARATOR . $file);
+        });
+
+        if (empty($files)) {
+            throw new \InvalidArgumentException(sprintf('Source directory %s is empty.', $sourceDirectory));
+        }
+
+        $sourceFullPath = $sourceDirectory . DIRECTORY_SEPARATOR . static::randomElement($files);
+
+        $destinationFile = Uuid::uuid() . '.' . pathinfo($sourceFullPath, PATHINFO_EXTENSION);
+        $destinationFullPath = $targetDirectory . DIRECTORY_SEPARATOR . $destinationFile;
+
+        if (false === copy($sourceFullPath, $destinationFullPath)) {
+            return false;
+        }
+
+        return $fullPath ? $destinationFullPath : $destinationFile;
     }
 }

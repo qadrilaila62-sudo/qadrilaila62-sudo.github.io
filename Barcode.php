@@ -1,52 +1,107 @@
 <?php
 
-declare(strict_types=1);
+namespace Faker\Provider;
 
-namespace Faker\Core;
-
-use Faker\Calculator;
-use Faker\Extension;
+use Faker\Calculator\Ean;
+use Faker\Calculator\Isbn;
 
 /**
- * @experimental This class is experimental and does not fall under our BC promise
+ * @see http://en.wikipedia.org/wiki/EAN-13
+ * @see http://en.wikipedia.org/wiki/ISBN
  */
-final class Barcode implements Extension\BarcodeExtension
+class Barcode extends Base
 {
-    private Extension\NumberExtension $numberExtension;
-
-    public function __construct(?Extension\NumberExtension $numberExtension = null)
+    private function ean($length = 13)
     {
-        $this->numberExtension = $numberExtension ?: new Number();
+        $code = static::numerify(str_repeat('#', $length - 1));
+
+        return $code . Ean::checksum($code);
     }
 
-    private function ean(int $length = 13): string
+    /**
+     * Utility function for computing EAN checksums
+     *
+     * @deprecated Use \Faker\Calculator\Ean::checksum() instead
+     *
+     * @param string $input
+     *
+     * @return int
+     */
+    protected static function eanChecksum($input)
     {
-        $code = Extension\Helper::numerify(str_repeat('#', $length - 1));
-
-        return sprintf('%s%s', $code, Calculator\Ean::checksum($code));
+        return Ean::checksum($input);
     }
 
-    public function ean13(): string
+    /**
+     * ISBN-10 check digit
+     *
+     * @see http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digits
+     * @deprecated Use \Faker\Calculator\Isbn::checksum() instead
+     *
+     * @param string $input ISBN without check-digit
+     *
+     * @throws \LengthException When wrong input length passed
+     *
+     * @return string
+     */
+    protected static function isbnChecksum($input)
     {
-        return $this->ean();
+        return Isbn::checksum($input);
     }
 
-    public function ean8(): string
+    /**
+     * Get a random EAN13 barcode.
+     *
+     * @return string
+     *
+     * @example '4006381333931'
+     */
+    public function ean13()
+    {
+        return $this->ean(13);
+    }
+
+    /**
+     * Get a random EAN8 barcode.
+     *
+     * @return string
+     *
+     * @example '73513537'
+     */
+    public function ean8()
     {
         return $this->ean(8);
     }
 
-    public function isbn10(): string
+    /**
+     * Get a random ISBN-10 code
+     *
+     * @see http://en.wikipedia.org/wiki/International_Standard_Book_Number
+     *
+     * @return string
+     *
+     * @example '4881416324'
+     */
+    public function isbn10()
     {
-        $code = Extension\Helper::numerify(str_repeat('#', 9));
+        $code = static::numerify(str_repeat('#', 9));
 
-        return sprintf('%s%s', $code, Calculator\Isbn::checksum($code));
+        return $code . Isbn::checksum($code);
     }
 
-    public function isbn13(): string
+    /**
+     * Get a random ISBN-13 code
+     *
+     * @see http://en.wikipedia.org/wiki/International_Standard_Book_Number
+     *
+     * @return string
+     *
+     * @example '9790404436093'
+     */
+    public function isbn13()
     {
-        $code = '97' . $this->numberExtension->numberBetween(8, 9) . Extension\Helper::numerify(str_repeat('#', 9));
+        $code = '97' . self::numberBetween(8, 9) . static::numerify(str_repeat('#', 9));
 
-        return sprintf('%s%s', $code, Calculator\Ean::checksum($code));
+        return $code . Ean::checksum($code);
     }
 }

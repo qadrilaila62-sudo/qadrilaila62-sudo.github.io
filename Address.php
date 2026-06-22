@@ -1,58 +1,166 @@
 <?php
 
-namespace Faker\Provider\sr_Cyrl_RS;
+namespace Faker\Provider;
 
-class Address extends \Faker\Provider\Address
+class Address extends Base
 {
-    protected static $postcode = ['#####'];
-
-    protected static $streetPrefix = [
-        'Булевар',
-    ];
-
-    protected static $street = [
-        'Краља Милана', 'Цара Душана', 'Николе Тесле', 'Михајла Пупина', 'Николе Пашића',
-    ];
-
-    protected static $streetNameFormats = [
-        '{{street}}',
-        '{{streetPrefix}} {{street}}',
-    ];
-
-    protected static $streetAddressFormats = [
-        '{{streetName}} {{buildingNumber}}',
-    ];
-
+    protected static $citySuffix = ['Ville'];
+    protected static $streetSuffix = ['Street'];
     protected static $cityFormats = [
-        '{{cityName}}',
+        '{{firstName}}{{citySuffix}}',
     ];
+    protected static $streetNameFormats = [
+        '{{lastName}} {{streetSuffix}}',
+    ];
+    protected static $streetAddressFormats = [
+        '{{buildingNumber}} {{streetName}}',
+    ];
+    protected static $addressFormats = [
+        '{{streetAddress}} {{postcode}} {{city}}',
+    ];
+
+    protected static $buildingNumber = ['%#'];
+    protected static $postcode = ['#####'];
+    protected static $country = [];
 
     /**
-     * @see http://sr.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%B4%D0%BE%D0%B2%D0%B8_%D1%83_%D0%A1%D1%80%D0%B1%D0%B8%D1%98%D0%B8
+     * @example 'town'
+     *
+     * @return string
      */
-    protected static $cityNames = [
-        'Београд', 'Ваљево', 'Врање', 'Зајечар', 'Зрењанин', 'Јагодина', 'Крагујевац', 'Краљево', 'Крушевац', 'Лесковац', 'Лозница', 'Ниш', 'Нови Пазар', 'Нови Сад', 'Панчево', 'Пожаревац', 'Приштина', 'Смедерево', 'Сомбор', 'Сремска Митровица', 'Суботица', 'Ужице', 'Чачак', 'Шабац',
-    ];
+    public static function citySuffix()
+    {
+        return static::randomElement(static::$citySuffix);
+    }
 
     /**
-     * @see https://github.com/umpirsky/country-list/blob/master/country/cldr/sr_Cyrl/country.php
+     * @example 'Avenue'
+     *
+     * @return string
      */
-    protected static $country = [
-        'Острво Асенсион', 'Андора', 'Уједињени Арапски Емирати', 'Авганистан', 'Антигве и Барбуда', 'Ангвила', 'Албанија', 'Арменија', 'Холандски Антили', 'Ангола', 'Антарктик', 'Аргентина', 'Америчка Самоа', 'Аустрија', 'Аустралија', 'Аруба', 'Аландска острва', 'Азербејџан', 'Босна и Херцеговина', 'Барбадос', 'Бангладеш', 'Белгија', 'Буркина Фасо', 'Бугарска', 'Бахреин', 'Бурунди', 'Бенин', 'Свети Бартоломеј', 'Бермуда', 'Брунеј', 'Боливија', 'Бразил', 'Бахами', 'Бутан', 'Буве Острва', 'Боцвана', 'Белорусија', 'Белизе', 'Канада', 'Кокос (Келинг) Острва', 'Конго - Киншаса', 'Централно Афричка Република', 'Конго - Бразавил', 'Швајцарска', 'Обала Слоноваче', 'Кукова Острва', 'Чиле', 'Камерун', 'Кина', 'Колумбија', 'Острво Клипертон', 'Костарика', 'Србија и Црна Гора', 'Куба', 'Капе Верде', 'Божићна острва', 'Кипар', 'Чешка', 'Немачка', 'Дијего Гарсија', 'Џибути', 'Данска', 'Доминика', 'Доминиканска Република', 'Алжир', 'Сеута и Мелиља', 'Еквадор', 'Естонија', 'Египат', 'Западна Сахара', 'Еритреја', 'Шпанија', 'Етиопија', 'Европска Унија', 'Финска', 'Фиџи', 'Фолкландска Острва', 'Микронезија', 'Фарска Острва', 'Француска', 'Габон', 'Велика Британија', 'Гренада', 'Грузија', 'Француска Гвајана', 'Гурнси', 'Гана', 'Гибралтар', 'Гренланд', 'Гамбија', 'Гвинеја', 'Гваделупе', 'Екваторијална Гвинеја', 'Грчка', 'Јужна Џорџија и Јужна Сендвич Острва', 'Гватемала', 'Гуам', 'Гвинеја-Бисао', 'Гвајана', 'Хонг Конг С. А. Р. Кина', 'Херд и Мекдоналд Острва', 'Хондурас', 'Хрватска', 'Хаити', 'Мађарска', 'Канарска острва', 'Индонезија', 'Ирска', 'Израел', 'Острво Ман', 'Индија', 'Британска територија у Индијском океану', 'Ирак', 'Иран', 'Исланд', 'Италија', 'Џерси', 'Јамајка', 'Јордан', 'Јапан', 'Кенија', 'Киргизстан', 'Камбоџа', 'Кирибати', 'Коморска Острва', 'Сент Китс и Невис', 'Северна Кореја', 'Јужна Кореја', 'Кувајт', 'Кајманска Острва', 'Казахстан', 'Лаос', 'Либан', 'Сент Луција', 'Лихтенштајн', 'Шри Ланка', 'Либерија', 'Лесото', 'Литванија', 'Луксембург', 'Летонија', 'Либија', 'Мароко', 'Монако', 'Молдавија', 'Црна Гора', 'Сент Мартин', 'Мадагаскар', 'Маршалска Острва', 'Македонија', 'Мали', 'Мијанмар [Бурма]', 'Монголија', 'Макао С. А. Р. Кина', 'Северна Маријанска Острва', 'Мартиник', 'Мауританија', 'Монсерат', 'Малта', 'Маурицијус', 'Малдиви', 'Малави', 'Мексико', 'Малезија', 'Мозамбик', 'Намибија', 'Нова Каледонија', 'Нигер', 'Норфолк Острво', 'Нигерија', 'Никарагва', 'Холандија', 'Норвешка', 'Непал', 'Науру', 'Ниуе', 'Нови Зеланд', 'Оман', 'Панама', 'Перу', 'Француска Полинезија', 'Папуа Нова Гвинеја', 'Филипини', 'Пакистан', 'Пољска', 'Сен Пјер и Микелон', 'Питкерн', 'Порто Рико', 'Палестинске територије', 'Португал', 'Палау', 'Парагвај', 'Катар', 'Остала океанија', 'Реинион', 'Румунија', 'Србија', 'Русија', 'Руанда', 'Саудијска Арабија', 'Соломонска Острва', 'Сејшели', 'Судан', 'Шведска', 'Сингапур', 'Света Јелена', 'Словенија', 'Свалбард и Јанмајен Острва', 'Словачка', 'Сијера Леоне', 'Сан Марино', 'Сенегал', 'Сомалија', 'Суринам', 'Сао Томе и Принципе', 'Салвадор', 'Сирија', 'Свазиленд', 'Тристан да Куња', 'Туркс и Кајкос Острва', 'Чад', 'Француске Јужне Територије', 'Того', 'Тајланд', 'Таџикистан', 'Токелау', 'Источни Тимор', 'Туркменистан', 'Тунис', 'Тонга', 'Турска', 'Тринидад и Тобаго', 'Тувалу', 'Тајван', 'Танзанија', 'Украјина', 'Уганда', 'Мања удаљена острва САД', 'Сједињене Америчке Државе', 'Уругвај', 'Узбекистан', 'Ватикан', 'Сент Винсент и Гренадини', 'Венецуела', 'Британска Девичанска Острва', 'С.А.Д. Девичанска Острва', 'Вијетнам', 'Вануату', 'Валис и Футуна Острва', 'Самоа', 'Јемен', 'Мајоте', 'Јужноафричка Република', 'Замбија', 'Зимбабве',
-    ];
-
-    public static function streetPrefix()
+    public static function streetSuffix()
     {
-        return static::randomElement(static::$streetPrefix);
+        return static::randomElement(static::$streetSuffix);
     }
 
-    public static function street()
+    /**
+     * @example '791'
+     *
+     * @return string
+     */
+    public static function buildingNumber()
     {
-        return static::randomElement(static::$street);
+        return static::numerify(static::randomElement(static::$buildingNumber));
     }
 
-    public function cityName()
+    /**
+     * @example 'Sashabury'
+     *
+     * @return string
+     */
+    public function city()
     {
-        return static::randomElement(static::$cityNames);
+        $format = static::randomElement(static::$cityFormats);
+
+        return $this->generator->parse($format);
+    }
+
+    /**
+     * @example 'Crist Parks'
+     *
+     * @return string
+     */
+    public function streetName()
+    {
+        $format = static::randomElement(static::$streetNameFormats);
+
+        return $this->generator->parse($format);
+    }
+
+    /**
+     * @example '791 Crist Parks'
+     *
+     * @return string
+     */
+    public function streetAddress()
+    {
+        $format = static::randomElement(static::$streetAddressFormats);
+
+        return $this->generator->parse($format);
+    }
+
+    /**
+     * @example 86039-9874
+     *
+     * @return string
+     */
+    public static function postcode()
+    {
+        return static::toUpper(static::bothify(static::randomElement(static::$postcode)));
+    }
+
+    /**
+     * @example '791 Crist Parks, Sashabury, IL 86039-9874'
+     *
+     * @return string
+     */
+    public function address()
+    {
+        $format = static::randomElement(static::$addressFormats);
+
+        return $this->generator->parse($format);
+    }
+
+    /**
+     * @example 'Japan'
+     *
+     * @return string
+     */
+    public static function country()
+    {
+        return static::randomElement(static::$country);
+    }
+
+    /**
+     * Uses signed degrees format (returns a float number between -90 and 90)
+     *
+     * @example '77.147489'
+     *
+     * @param float|int $min
+     * @param float|int $max
+     *
+     * @return float
+     */
+    public static function latitude($min = -90, $max = 90)
+    {
+        return static::randomFloat(6, $min, $max);
+    }
+
+    /**
+     * Uses signed degrees format (returns a float number between -180 and 180)
+     *
+     * @example '86.211205'
+     *
+     * @param float|int $min
+     * @param float|int $max
+     *
+     * @return float
+     */
+    public static function longitude($min = -180, $max = 180)
+    {
+        return static::randomFloat(6, $min, $max);
+    }
+
+    /**
+     * @example array('77.147489', '86.211205')
+     *
+     * @return float[]
+     */
+    public static function localCoordinates()
+    {
+        return [
+            'latitude' => static::latitude(),
+            'longitude' => static::longitude(),
+        ];
     }
 }

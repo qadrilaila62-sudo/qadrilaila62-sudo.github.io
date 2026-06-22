@@ -1,240 +1,209 @@
-# Change Log
+# CHANGELOG
 
-## [3.3.3] - 2024-08-10
+## [Unreleased](https://github.com/FakerPHP/Faker/compare/v1.24.0...1.24.1)
 
-### Added
-- N/A
+- Removed domain `gmail.com.au` from `Provider\en_AU\Internet` (#886)
 
-### Changed
-- N/A
+## [2024-11-09, v1.24.0](https://github.com/FakerPHP/Faker/compare/v1.23.1..v1.24.0)
 
-### Fixed
-- Added fixes for making sure `?` is not passed for both DOM and DOW (#148, thank you https://github.com/LeoVie)
-- Fixed bug in Next Execution Time by sorting minutes properly (#160, thank you https://github.com/imyip)
+- Fix internal deprecations in Doctrine's populator by @gnutix in (#889)
+- Fix mobile phone number pattern for France by @ker0x in (#859)
+- PHP 8.4 Support by @Jubeki in (#904)
 
-## [3.3.2] - 2022-09-19
+- Added support for PHP 8.4 (#904)
 
-### Added
-- N/A
+## [2023-09-29, v1.23.1](https://github.com/FakerPHP/Faker/compare/v1.23.0..v1.23.1)
 
-### Changed
-- Skip some daylight savings time tests for PHP 8.1 daylight savings time weirdness (#146)
+- Fixed double `а` female lastName in `ru_RU/Person::name()` (#832)
+- Fixed polish license plates (#685)
+- Stopped using `static` in callables in `Provider\pt_BR\PhoneNumber` (#785)
+- Fixed incorrect female name (#794)
+- Stopped using the deprecated `MT_RAND_PHP` constant to seed the random generator on PHP 8.3 (#844)
 
-### Fixed
-- Changed string interpolations to work better with PHP 8.2 (#142)
+## [2023-06-12, v1.23.0](https://github.com/FakerPHP/Faker/compare/v1.22.0..v1.23.0)
 
-## [3.3.1] - 2022-01-18
+- Update `randomElements` to return random number of elements when no count is provided (#658)
 
-### Added
-- N/A
+## [2023-05-14, v1.22.0](https://github.com/FakerPHP/Faker/compare/v1.21.0..v1.22.0)
 
-### Changed
-- N/A
+- Fixed `randomElements()` to accept empty iterator (#605)
+- Added support for passing an `Enum` to `randomElement()` and `randomElements()` (#620)
+- Started rejecting invalid arguments passed to `randomElement()` and `randomElements()` (#642)
 
-### Fixed
-- Fixed issue when timezones had no transition, which can occur over very short timespans (#134)
+## [2022-12-13, v1.21.0](https://github.com/FakerPHP/Faker/compare/v1.20.0..v1.21.0)
 
-## [3.3.0] - 2022-01-13
+- Dropped support for PHP 7.1, 7.2, and 7.3 (#543)
+- Added support for PHP 8.2 (#528)
 
-### Added
-- Added ability to register your own expression aliases (#132)
+## [2022-07-20, v1.20.0](https://github.com/FakerPHP/Faker/compare/v1.19.0..v1.20.0)
 
-### Changed
-- Changed how Day of Week and Day of Month resolve when one or the other is `*` or `?`
+- Fixed typo in French phone number (#452)
+- Fixed some Hungarian naming bugs (#451)
+- Fixed bug where the NL-BE VAT generation was incorrect (#455)
+- Improve Turkish phone numbers for E164 and added landline support (#460)
+- Add Microsoft Edge User Agent (#464)
+- Added option to set image formats on Faker\Provider\Image (#473)
+- Added support for French color translations (#466)
+- Support filtering timezones by country code (#480)
+- Fixed typo in some greek names (#490)
+- Marked the Faker\Provider\Image as deprecated
 
-### Fixed
-- PHPStan should no longer error out
+## [2022-02-02, v1.19.0](https://github.com/FakerPHP/Faker/compare/v1.18.0..v1.19.0)
 
-## [3.2.4] - 2022-01-12
+- Added color extension to core (#442)
+- Added conflict with `doctrine/persistence` below version `1.4`
+- Fix for support on different Doctrine ORM versions (#414)
+- Fix usage of `Doctrine\Persistence` dependency
+- Fix CZ Person birthNumber docblock return type (#437)
+- Fix is_IS Person docbock types (#439)
+- Fix is_IS Address docbock type (#438)
+- Fix regexify escape backslash in character class (#434)
+- Removed UUID from Generator to be able to extend it (#441)
 
-### Added
-- N/A
+## [2022-01-23, v1.18.0](https://github.com/FakerPHP/Faker/compare/v1.17.0..v1.18.0)
 
-### Changed
-- Changed how Day of Week increment/decrement to help with DST changes (#131)
+- Deprecated UUID, use uuid3 to specify version (#427)
+- Reset formatters when adding a new provider (#366)
+- Helper methods to use our custom generators (#155)
+- Set allow-plugins for Composer 2.2 (#405)
+- Fix kk_KZ\Person::individualIdentificationNumber generation (#411)
+- Allow for -> syntax to be used in parsing (#423)
+- Person->name was missing string return type (#424)
+- Generate a valid BE TAX number (#415)
+- Added the UUID extension to Core (#427)
 
-### Fixed
-- N/A
+## [2021-12-05, v1.17.0](https://github.com/FakerPHP/Faker/compare/v1.16.0..v1.17.0)
 
-## [3.2.3] - 2022-01-05
+- Partial PHP 8.1 compatibility (#373)
+- Add payment provider for `ne_NP` locale (#375)
+- Add Egyptian Arabic `ar_EG` locale (#377)
+- Updated list of South African TLDs (#383)
+- Fixed formatting of E.164 numbers (#380)
+- Allow `symfony/deprecation-contracts` `^3.0` (#397)
 
-### Added
-- N/A
+## [2021-09-06, v1.16.0](https://github.com/FakerPHP/Faker/compare/v1.15.0..v1.16.0)
 
-### Changed
-- Changed how minutes and hours increment/decrement to help with DST changes (#131)
+- Add Company extension
+- Add Address extension
+- Add Person extension
+- Add PhoneNumber extension
+- Add VersionExtension (#350)
+- Stricter types in Extension\Container and Extension\GeneratorAwareExtension (#345)
+- Fix deprecated property access in `nl_NL` (#348)
+- Add support for `psr/container` >= 2.0 (#354)
+- Add missing union types in Faker\Generator (#352)
 
-### Fixed
-- N/A
+## [2021-07-06, v1.15.0](https://github.com/FakerPHP/Faker/compare/v1.14.1..v1.15.0)
 
-## [3.2.2] - 2022-01-05
+- Updated the generator phpdoc to help identify magic methods (#307)
+- Prevent direct access and triggered deprecation warning for "word" (#302)
+- Updated length on all global e164 numbers (#301)
+- Updated last names from different source (#312)
+- Don't generate birth number of '000' for Swedish personal identity (#306)
+- Add job list for localization id_ID (#339)
 
-### Added
-- N/A
+## [2021-03-30, v1.14.1](https://github.com/FakerPHP/Faker/compare/v1.14.0..v1.14.1)
 
-### Changed
-- Marked some methods `@internal` (#124)
+- Fix where randomNumber and randomFloat would return a 0 value (#291 / #292)
 
-### Fixed
-- Fixed issue with small ranges and large steps that caused an error with `range()` (#88)
-- Fixed issue where wraparound logic incorrectly considered high bound on range (#89)
+## [2021-03-29, v1.14.0](https://github.com/FakerPHP/Faker/compare/v1.13.0..v1.14.0)
 
-## [3.2.1] - 2022-01-04
+- Fix for realText to ensure the text keeps closer to its boundaries (#152)
+- Fix where regexify produces a random character instead of a literal dot (#135
+- Deprecate zh_TW methods that only call base methods (#122)
+- Add used extensions to composer.json as suggestion (#120)
+- Moved TCNo and INN from calculator to localized providers (#108)
+- Fix regex dot/backslash issue where a dot is replaced with a backslash as escape character (#206)
+- Deprecate direct property access (#164)
+- Added test to assert unique() behaviour (#233)
+- Added RUC for the es_PE locale (#244)
+- Test IBAN formats for Latin America (AR/PE/VE) (#260)
+- Added VAT number for en_GB (#255)
+- Added new districts for the ne_NP locale (#258)
+- Fix for U.S. Area Code Generation (#261)
+- Fix in numerify where a better random numeric value is guaranteed (#256)
+- Fix e164PhoneNumber to only generate valid phone numbers with valid country codes (#264)
+- Extract fixtures into separate classes (#234)
+- Remove french domains that no longer exists (#277)
+- Fix error that occurs when getting a polish title (#279)
+- Use valid area codes for North America E164 phone numbers (#280)
 
-### Added
-- N/A
+- Adding support for extensions and PSR-11 (#154)
+- Adding trait for GeneratorAwareExtension (#165)
+- Added helper class for extension (#162)
+- Added blood extension to core (#232)
+- Added barcode extension to core (#252)
+- Added number extension (#257)
 
-### Changed
-- Added PHP 8.1 to testing (#125)
+- Various code style updates
+- Added a note about our breaking change promise (#273)
 
-### Fixed
-- Allow better mixture of ranges, steps, and lists (#122)
-- Fixed return order when multiple dates are requested and inverted (#121)
-- Better handling over DST (#115)
-- Fixed PHPStan tests (#130)
+## [2020-12-18, v1.13.0](https://github.com/FakerPHP/Faker/compare/v1.12.1..v1.13.0)
 
-## [3.2.0] - 2022-01-04
+Several fixes and new additions in this release. A lot of cleanup has been done
+on the codebase on both tests and consistency.
 
-### Added
-- Added alias for `@midnight` (#117)
+- Feature/pl pl license plate (#62)
+- Fix greek phone numbers (#16)
+- Move AT payment provider logic to de_AT (#72)
+- Fix wiktionary links (#73)
+- Fix AT person links (#74)
+- Fix AT cities (#75)
+- Deprecate at_AT providers (#78)
+- Add Austrian `ssn()` to `Person` provider (#79)
+- Fix typos in id_ID Address (#83)
+- Austrian post codes (#86)
+- Updated Polish data (#70)
+- Improve Austrian social security number generation (#88)
+- Move US phone numbers with extension to own method (#91)
+- Add UK National Insurance number generator (#89)
+- Fix en_SG phone number generator (#100)
+- Remove usage of mt_rand (#87)
+- Remove whitespace from beginning of el_GR phone numbers (#105)
+- Building numbers can not be 0, 00, 000 (#107)
+- Add 172.16/12 local IPv4 block (#121)
+- Add JCB credit card type (#124)
+- Remove json_decode from emoji generation (#123)
+- Remove ro street address (#146)
 
-### Changed
-- Improved testing for instance of field in tests (#105)
-- Optimization for determining multiple run dates (#75)
-- `CronExpression` properties changed from private to protected (#106)
+## [2020-12-11, v1.12.1](https://github.com/FakerPHP/Faker/compare/v1.12.0..v1.12.1)
 
-### Fixed
-- N/A
+This is a security release that prevents a hacker to execute code on the server.
 
-## [3.1.0] - 2020-11-24
+## [2020-11-23, v1.12.0](https://github.com/FakerPHP/Faker/compare/v1.11.0..v1.12.0)
 
-### Added
-- Added `CronExpression::getParts()` method to get parts of the expression as an array (#83)
+- Fix ro_RO first and last day of year calculation offset (#65)
+- Fix en_NG locale test namespaces that did not match PSR-4 (#57)
+- Added Singapore NRIC/FIN provider (#56)
+- Added provider for Lithuanian municipalities (#58)
+- Added blood types provider (#61)
 
-### Changed
-- Changed to Interfaces for some type hints (#97, #86)
-- Dropped minimum PHP version to 7.2
-- Few syntax changes for phpstan compatibility (#93)
+## [2020-11-15, v1.11.0](https://github.com/FakerPHP/Faker/compare/v1.10.1..v1.11.0)
 
-### Fixed
-- N/A
+- Added Provider for Swedish Municipalities
+- Updates to person names in pt_BR
+- Many code style changes
 
-### Deprecated
-- Deprecated `CronExpression::factory` in favor of the constructor (#56)
-- Deprecated `CronExpression::YEAR` as a formality, the functionality is already removed (#87)
+## [2020-10-28, v1.10.1](https://github.com/FakerPHP/Faker/compare/v1.10.0..v1.10.1)
 
-## [3.0.1] - 2020-10-12
-### Added
-- Added support for PHP 8 (#92)
-### Changed
-- N/A
-### Fixed
-- N/A
+- Updates the Danish addresses in dk_DK
+- Removed offense company names in nl_NL
+- Clarify changelog with original fork
+- Standin replacement for LoremPixel to Placeholder.com (#11)
 
-## [3.0.0] - 2020-03-25
+## [2020-10-27, v1.10.0](https://github.com/FakerPHP/Faker/compare/v1.9.1..v1.10.0)
 
-**MAJOR CHANGE** - In previous versions of this library, setting both a "Day of Month" and a "Day of Week" would be interpreted as an `AND` statement, not an `OR` statement. For example:
+- Support PHP 7.1-8.0
+- Fix typo in de_DE Company Provider
+- Fix dateTimeThisYear method
+- Fix typo in de_DE jobTitleFormat
+- Fix IBAN generation for CR
+- Fix typos in greek first names
+- Fix US job title typo
+- Do not clear entity manager for doctrine orm populator
+- Remove persian rude words
+- Corrections to RU names
 
-`30 0 1 * 1`
+## 2020-10-27, v1.9.1
 
-would evaluate to "Run 30 minutes after the 0 hour when the Day Of Month is 1 AND a Monday" instead of "Run 30 minutes after the 0 hour on Day Of Month 1 OR a Monday", where the latter is more inline with most cron systems. This means that if your cron expression has both of these fields set, you may see your expression fire more often starting with v3.0.0. 
-
-### Added
-- Additional docblocks for IDE and documentation
-- Added phpstan as a development dependency
-- Added a `Cron\FieldFactoryInterface` to make migrations easier (#38)
-### Changed
-- Changed some DI testing during TravisCI runs
-- `\Cron\CronExpression::determineTimezone()` now checks for `\DateTimeInterface` instead of just `\DateTime`
-- Errors with fields now report a more human-understandable error and are 1-based instead of 0-based
-- Better support for `\DateTimeImmutable` across the library by typehinting for `\DateTimeInterface` now
-- Literals should now be less case-sensative across the board
-- Changed logic for when both a Day of Week and a Day of Month are supplied to now be an OR statement, not an AND
-### Fixed
-- Fixed infinite loop when determining last day of week from literals
-- Fixed bug where single number ranges were allowed (ex: `1/10`)
-- Fixed nullable FieldFactory in CronExpression where no factory could be supplied
-- Fixed issue where logic for dropping seconds to 0 could lead to a timezone change
-
-## [2.3.1] - 2020-10-12
-### Added
-- Added support for PHP 8 (#92)
-### Changed
-- N/A
-### Fixed
-- N/A
-
-## [2.3.0] - 2019-03-30
-### Added
-- Added support for DateTimeImmutable via DateTimeInterface
-- Added support for PHP 7.3
-- Started listing projects that use the library
-### Changed
-- Errors should now report a human readable position in the cron expression, instead of starting at 0
-### Fixed
-- N/A
-
-## [2.2.0] - 2018-06-05
-### Added
-- Added support for steps larger than field ranges (#6)
-## Changed
-- N/A
-### Fixed
-- Fixed validation for numbers with leading 0s (#12)
-
-## [2.1.0] - 2018-04-06
-### Added
-- N/A
-### Changed
-- Upgraded to PHPUnit 6 (#2)
-### Fixed
-- Refactored timezones to deal with some inconsistent behavior (#3)
-- Allow ranges and lists in same expression (#5)
-- Fixed regression where literals were not converted to their numerical counterpart (#)
-
-## [2.0.0] - 2017-10-12
-### Added
-- N/A
-
-### Changed
-- Dropped support for PHP 5.x
-- Dropped support for the YEAR field, as it was not part of the cron standard
-
-### Fixed
-- Reworked validation for all the field types
-- Stepping should now work for 1-indexed fields like Month (#153)
-
-## [1.2.0] - 2017-01-22
-### Added
-- Added IDE, CodeSniffer, and StyleCI.IO support
-
-### Changed
-- Switched to PSR-4 Autoloading
-
-### Fixed
-- 0 step expressions are handled better
-- Fixed `DayOfMonth` validation to be more strict
-- Typos
-
-## [1.1.0] - 2016-01-26
-### Added
-- Support for non-hourly offset timezones 
-- Checks for valid expressions
-
-### Changed
-- Max Iterations no longer hardcoded for `getRunDate()`
-- Supports DateTimeImmutable for newer PHP verions
-
-### Fixed
-- Fixed looping bug for PHP 7 when determining the last specified weekday of a month
-
-## [1.0.3] - 2013-11-23
-### Added
-- Now supports expressions with any number of extra spaces, tabs, or newlines
-
-### Changed
-- Using static instead of self in `CronExpression::factory`
-
-### Fixed
-- Fixes issue [#28](https://github.com/mtdowling/cron-expression/issues/28) where PHP increments of ranges were failing due to PHP casting hyphens to 0
-- Only set default timezone if the given $currentTime is not a DateTime instance ([#34](https://github.com/mtdowling/cron-expression/issues/34))
+- Initial version. Same as `fzaninotto/Faker:v1.9.1`.
