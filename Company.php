@@ -1,67 +1,60 @@
 <?php
 
-namespace Faker\Provider\da_DK;
+namespace Faker\Provider\fa_IR;
 
 class Company extends \Faker\Provider\Company
 {
-    /**
-     * @var array Danish company name formats.
-     */
     protected static $formats = [
-        '{{lastName}} {{companySuffix}}',
-        '{{lastName}} {{companySuffix}}',
-        '{{lastName}} {{companySuffix}}',
-        '{{firstname}} {{lastName}} {{companySuffix}}',
-        '{{middleName}} {{companySuffix}}',
-        '{{middleName}} {{companySuffix}}',
-        '{{middleName}} {{companySuffix}}',
-        '{{firstname}} {{middleName}} {{companySuffix}}',
-        '{{lastName}} & {{lastName}} {{companySuffix}}',
-        '{{lastName}} og {{lastName}} {{companySuffix}}',
-        '{{lastName}} & {{lastName}} {{companySuffix}}',
-        '{{lastName}} og {{lastName}} {{companySuffix}}',
-        '{{middleName}} & {{middleName}} {{companySuffix}}',
-        '{{middleName}} og {{middleName}} {{companySuffix}}',
-        '{{middleName}} & {{lastName}}',
-        '{{middleName}} og {{lastName}}',
+        '{{companyPrefix}} {{companyField}} {{firstName}}',
+        '{{companyPrefix}} {{companyField}} {{firstName}}',
+        '{{companyPrefix}} {{companyField}} {{firstName}}',
+        '{{companyPrefix}} {{companyField}} {{firstName}}',
+        '{{companyPrefix}} {{companyField}} {{lastName}}',
+        '{{companyField}} {{firstName}}',
+        '{{companyField}} {{firstName}}',
+        '{{companyField}} {{lastName}}',
+    ];
+
+    protected static $companyPrefix = [
+        'شرکت', 'موسسه', 'سازمان', 'بنیاد',
+    ];
+
+    protected static $companyField = [
+        'فناوری اطلاعات', 'راه و ساختمان', 'توسعه معادن', 'استخراج و اکتشاف',
+        'سرمایه گذاری', 'نساجی', 'کاریابی', 'تجهیزات اداری', 'تولیدی', 'فولاد',
+    ];
+
+    protected static $contract = [
+        'رسمی', 'پیمانی', 'تمام وقت', 'پاره وقت', 'پروژه ای', 'ساعتی',
     ];
 
     /**
-     * @var array Company suffixes.
-     */
-    protected static $companySuffix = ['ApS', 'A/S', 'I/S', 'K/S'];
-
-    /**
-     * @see http://cvr.dk/Site/Forms/CMS/DisplayPage.aspx?pageid=60
-     *
-     * @var string CVR number format.
-     */
-    protected static $cvrFormat = '%#######';
-
-    /**
-     * @see http://cvr.dk/Site/Forms/CMS/DisplayPage.aspx?pageid=60
-     *
-     * @var string P number (production number) format.
-     */
-    protected static $pFormat = '%#########';
-
-    /**
-     * Generates a CVR number (8 digits).
+     * @example 'شرکت'
      *
      * @return string
      */
-    public static function cvr()
+    public static function companyPrefix()
     {
-        return static::numerify(static::$cvrFormat);
+        return static::randomElement(static::$companyPrefix);
     }
 
     /**
-     * Generates a P entity number (10 digits).
+     * @example 'سرمایه گذاری'
      *
      * @return string
      */
-    public static function p()
+    public static function companyField()
     {
-        return static::numerify(static::$pFormat);
+        return static::randomElement(static::$companyField);
+    }
+
+    /**
+     * @example 'تمام وقت'
+     *
+     * @return string
+     */
+    public function contract()
+    {
+        return static::randomElement(static::$contract);
     }
 }
