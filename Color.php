@@ -1,24 +1,12 @@
 <?php
 
-namespace Faker\Provider\es_ES;
+namespace Faker\Provider\kk_KZ;
 
 class Color extends \Faker\Provider\Color
 {
     protected static $safeColorNames = [
-        'amarillo',
-        'azul marino',
-        'azul',
-        'blanco',
-        'celeste',
-        'gris',
-        'lima',
-        'magenta',
-        'marrón',
-        'morado',
-        'negro',
-        'plata',
-        'turquesa',
-        'verde',
-        'verde oliva',
+        'қара', 'қою қызыл', 'жасыл', 'қара көк', 'сарғыш түс',
+        'күлгін', 'көк', 'көк', 'күміс',
+        'сұр', 'сары', 'қызылкүрең түс', 'теңіз толқыны түс', 'ақ',
     ];
 }

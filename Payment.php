@@ -1,10 +1,21 @@
 <?php
 
-namespace Faker\Provider\es_ES;
+namespace Faker\Provider\kk_KZ;
 
 class Payment extends \Faker\Provider\Payment
 {
-    private static $vatMap = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'N', 'P', 'Q', 'R', 'S', 'U', 'V', 'W'];
+    protected static $banks = [
+        'Қазкоммерцбанк',
+        'Халық Банкі',
+    ];
+
+    /**
+     * @example 'Қазкоммерцбанк'
+     */
+    public static function bank()
+    {
+        return static::randomElement(static::$banks);
+    }
 
     /**
      * International Bank Account Number (IBAN)
@@ -17,26 +28,8 @@ class Payment extends \Faker\Provider\Payment
      *
      * @return string
      */
-    public static function bankAccountNumber($prefix = '', $countryCode = 'ES', $length = null)
+    public static function bankAccountNumber($prefix = '', $countryCode = 'KZ', $length = null)
     {
         return static::iban($countryCode, $prefix, $length);
-    }
-
-    /**
-     * Value Added Tax (VAT)
-     *
-     * @example 'B93694545'
-     *
-     * @see https://en.wikipedia.org/wiki/VAT_identification_number
-     * @see https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal
-     *
-     * @return string VAT Number
-     */
-    public static function vat()
-    {
-        $letter = static::randomElement(self::$vatMap);
-        $number = static::numerify('########');
-
-        return $letter . $number;
     }
 }
