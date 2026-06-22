@@ -13,18 +13,57 @@ declare(strict_types=1);
 
 namespace GrahamCampbell\ResultType;
 
+use PhpOption\None;
+use PhpOption\Some;
+
 /**
  * @template T
  * @template E
+ *
+ * @extends \GrahamCampbell\ResultType\Result<T,E>
  */
-abstract class Result
+final class Success extends Result
 {
+    /**
+     * @var T
+     */
+    private $value;
+
+    /**
+     * Internal constructor for a success value.
+     *
+     * @param T $value
+     *
+     * @return void
+     */
+    private function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * Create a new error value.
+     *
+     * @template S
+     *
+     * @param S $value
+     *
+     * @return \GrahamCampbell\ResultType\Result<S,E>
+     */
+    public static function create($value)
+    {
+        return new self($value);
+    }
+
     /**
      * Get the success option value.
      *
      * @return \PhpOption\Option<T>
      */
-    abstract public function success();
+    public function success()
+    {
+        return Some::create($this->value);
+    }
 
     /**
      * Map over the success value.
@@ -35,7 +74,10 @@ abstract class Result
      *
      * @return \GrahamCampbell\ResultType\Result<S,E>
      */
-    abstract public function map(callable $f);
+    public function map(callable $f)
+    {
+        return self::create($f($this->value));
+    }
 
     /**
      * Flat map over the success value.
@@ -47,14 +89,20 @@ abstract class Result
      *
      * @return \GrahamCampbell\ResultType\Result<S,F>
      */
-    abstract public function flatMap(callable $f);
+    public function flatMap(callable $f)
+    {
+        return $f($this->value);
+    }
 
     /**
      * Get the error option value.
      *
      * @return \PhpOption\Option<E>
      */
-    abstract public function error();
+    public function error()
+    {
+        return None::create();
+    }
 
     /**
      * Map over the error value.
@@ -65,5 +113,8 @@ abstract class Result
      *
      * @return \GrahamCampbell\ResultType\Result<T,F>
      */
-    abstract public function mapError(callable $f);
+    public function mapError(callable $f)
+    {
+        return self::create($this->value);
+    }
 }
