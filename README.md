@@ -1,158 +1,131 @@
-Dot Access Data
-===============
+PHP Cron Expression Parser
+==========================
 
-[![Latest Version](https://img.shields.io/packagist/v/dflydev/dot-access-data.svg?style=flat-square)](https://packagist.org/packages/dflydev/dot-access-data)
-[![Total Downloads](https://img.shields.io/packagist/dt/dflydev/dot-access-data.svg?style=flat-square)](https://packagist.org/packages/dflydev/dot-access-data)
-[![Software License](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/dflydev/dflydev-dot-access-data/Tests/main.svg?style=flat-square)](https://github.com/dflydev/dflydev-dot-access-data/actions?query=workflow%3ATests+branch%3Amain)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/dflydev/dflydev-dot-access-data.svg?style=flat-square)](https://scrutinizer-ci.com/g/dflydev/dflydev-dot-access-data/code-structure/)
-[![Quality Score](https://img.shields.io/scrutinizer/g/dflydev/dflydev-dot-access-data.svg?style=flat-square)](https://scrutinizer-ci.com/g/dflydev/dflydev-dot-access-data)
+[![Latest Stable Version](https://poser.pugx.org/dragonmantank/cron-expression/v)](https://packagist.org/packages/dragonmantank/cron-expression) [![Total Downloads](https://poser.pugx.org/dragonmantank/cron-expression/downloads)](https://packagist.org/packages/dragonmantank/cron-expression) [![Tests](https://github.com/dragonmantank/cron-expression/actions/workflows/tests.yml/badge.svg)](https://github.com/dragonmantank/cron-expression/actions/workflows/tests.yml) [![StyleCI](https://github.styleci.io/repos/103715337/shield?branch=master)](https://github.styleci.io/repos/103715337)
 
-Given a deep data structure, access data by dot notation.
+The PHP cron expression parser can parse a CRON expression, determine if it is
+due to run, calculate the next run date of the expression, and calculate the previous
+run date of the expression.  You can calculate dates far into the future or past by
+skipping **n** number of matching dates.
 
+The parser can handle increments of ranges (e.g. */12, 2-59/3), intervals (e.g. 0-9),
+lists (e.g. 1,2,3), **W** to find the nearest weekday for a given day of the month, **L** to
+find the last day of the month, **L** to find the last given weekday of a month, and hash
+(#) to find the nth weekday of a given month.
 
-Requirements
-------------
+More information about this fork can be found in the blog post [here](http://ctankersley.com/2017/10/12/cron-expression-update/). tl;dr - v2.0.0 is a major breaking change, and @dragonmantank can better take care of the project in a separate fork.
 
- * PHP (7.1+)
+Installing
+==========
 
-> For PHP (5.3+) please refer to version `1.0`.
+Add the dependency to your project:
 
+```bash
+composer require dragonmantank/cron-expression
+```
 
 Usage
------
-
-Abstract example:
-
+=====
 ```php
-use Dflydev\DotAccessData\Data;
+<?php
 
-$data = new Data;
+require_once '/vendor/autoload.php';
 
-$data->set('a.b.c', 'C');
-$data->set('a.b.d', 'D1');
-$data->append('a.b.d', 'D2');
-$data->set('a.b.e', ['E0', 'E1', 'E2']);
+// Works with predefined scheduling definitions
+$cron = new Cron\CronExpression('@daily');
+$cron->isDue();
+echo $cron->getNextRunDate()->format('Y-m-d H:i:s');
+echo $cron->getPreviousRunDate()->format('Y-m-d H:i:s');
 
-// C
-$data->get('a.b.c');
+// Works with complex expressions
+$cron = new Cron\CronExpression('3-59/15 6-12 */15 1 2-5');
+echo $cron->getNextRunDate()->format('Y-m-d H:i:s');
 
-// ['D1', 'D2']
-$data->get('a.b.d');
+// Calculate a run date two iterations into the future
+$cron = new Cron\CronExpression('@daily');
+echo $cron->getNextRunDate(null, 2)->format('Y-m-d H:i:s');
 
-// ['E0', 'E1', 'E2']
-$data->get('a.b.e');
-
-// true
-$data->has('a.b.c');
-
-// false
-$data->has('a.b.d.j');
-
-
-// 'some-default-value'
-$data->get('some.path.that.does.not.exist', 'some-default-value');
-
-// throws a MissingPathException because no default was given
-$data->get('some.path.that.does.not.exist');
+// Calculate a run date relative to a specific time
+$cron = new Cron\CronExpression('@monthly');
+echo $cron->getNextRunDate('2010-01-12 00:00:00')->format('Y-m-d H:i:s');
 ```
 
-A more concrete example:
+CRON Expressions
+================
 
-```php
-use Dflydev\DotAccessData\Data;
+A CRON expression is a string representing the schedule for a particular command to execute.  The parts of a CRON schedule are as follows:
 
-$data = new Data([
-    'hosts' => [
-        'hewey' => [
-            'username' => 'hman',
-            'password' => 'HPASS',
-            'roles'    => ['web'],
-        ],
-        'dewey' => [
-            'username' => 'dman',
-            'password' => 'D---S',
-            'roles'    => ['web', 'db'],
-            'nick'     => 'dewey dman',
-        ],
-        'lewey' => [
-            'username' => 'lman',
-            'password' => 'LP@$$',
-            'roles'    => ['db'],
-        ],
-    ],
-]);
-
-// hman
-$username = $data->get('hosts.hewey.username');
-// HPASS
-$password = $data->get('hosts.hewey.password');
-// ['web']
-$roles = $data->get('hosts.hewey.roles');
-// dewey dman
-$nick = $data->get('hosts.dewey.nick');
-// Unknown
-$nick = $data->get('hosts.lewey.nick', 'Unknown');
-
-// DataInterface instance
-$dewey = $data->getData('hosts.dewey');
-// dman
-$username = $dewey->get('username');
-// D---S
-$password = $dewey->get('password');
-// ['web', 'db']
-$roles = $dewey->get('roles');
-
-// No more lewey
-$data->remove('hosts.lewey');
-
-// Add DB to hewey's roles
-$data->append('hosts.hewey.roles', 'db');
-
-$data->set('hosts.april', [
-    'username' => 'aman',
-    'password' => '@---S',
-    'roles'    => ['web'],
-]);
-
-// Check if a key exists (true to this case)
-$hasKey = $data->has('hosts.dewey.username');
+```
+*   *   *   *   *
+-   -   -   -   -
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   +----- day of week (0-7) (Sunday = 0 or 7) (or SUN-SAT)
+|   |   |   +--------- month (1-12) (or JAN-DEC)
+|   |   +------------- day of month (1-31)
+|   +----------------- hour (0-23)
++--------------------- minute (0-59)
 ```
 
-`Data` may be used as an array, since it implements `ArrayAccess` interface:
+Each part of expression can also use wildcard, lists, ranges and steps:
 
-```php
-// Get
-$data->get('name') === $data['name']; // true
+- wildcard - match always
+	- `* * * * *` - At every minute.
+	- day of week and day of month also support `?`, an alias to `*`
+- lists - match list of values, ranges and steps
+	- e.g. `15,30 * * * *` - At minute 15 and 30.
+- ranges - match values in range
+	- e.g. `1-9 * * * *` - At every minute from 1 through 9.
+- steps - match every nth value in range
+	- e.g. `*/5 * * * *` - At every 5th minute.
+	- e.g. `0-30/5 * * * *` - At every 5th minute from 0 through 30.
+- combinations
+	- e.g. `0-14,30-44 * * * *` - At every minute from 0 through 14 and every minute from 30 through 44.
 
-$data['name'] = 'Dewey';
-// is equivalent to
-$data->set($name, 'Dewey');
+You can also use macro instead of an expression:
 
-isset($data['name']) === $data->has('name');
+- `@yearly`, `@annually` - At 00:00 on 1st of January. (same as `0 0 1 1 *`)
+- `@monthly` - At 00:00 on day-of-month 1. (same as `0 0 1 * *`)
+- `@weekly` - At 00:00 on Sunday. (same as `0 0 * * 0`)
+- `@daily`, `@midnight` - At 00:00. (same as `0 0 * * *`)
+- `@hourly` - At minute 0. (same as `0 * * * *`)
 
-// Remove key
-unset($data['name']);
-```
+Day of month extra features:
 
-`/` can also be used as a path delimiter:
+- nearest weekday - weekday (Monday-Friday) nearest to the given day
+	- e.g. `* * 15W * *` - At every minute on a weekday nearest to the 15th.
+	- If you were to specify `15W` as the value, the meaning is: "the nearest weekday to the 15th of the month"
+	  So if the 15th is a Saturday, the trigger will fire on Friday the 14th.
+	  If the 15th is a Sunday, the trigger will fire on Monday the 16th.
+	  If the 15th is a Tuesday, then it will fire on Tuesday the 15th.
+	- However, if you specify `1W` as the value for day-of-month,
+	  and the 1st is a Saturday, the trigger will fire on Monday the 3rd,
+	  as it will not 'jump' over the boundary of a month's days.
+- last day of the month
+	- e.g. `* * L * *` - At every minute on a last day-of-month.
+- last weekday of the month
+	- e.g. `* * LW * *` - At every minute on a last weekday.
 
-```php
-$data->set('a/b/c', 'd');
-echo $data->get('a/b/c'); // "d"
+Day of week extra features:
 
-$data->get('a/b/c') === $data->get('a.b.c'); // true
-```
+- nth day
+	- e.g. `* * * * 7#4` - At every minute on 4th Sunday.
+	- 1-5
+	- Every day of week repeats 4-5 times a month. To target the last one, use "last day" feature instead.
+- last day
+	- e.g. `* * * * 7L` - At every minute on the last Sunday.
 
-License
--------
+Requirements
+============
 
-This library is licensed under the MIT License - see the LICENSE file
-for details.
+- PHP 7.2+
+- PHPUnit is required to run the unit tests
+- Composer is required to run the unit tests
 
-
-Community
----------
-
-If you have questions or want to help out, join us in the
-[#dflydev](irc://irc.freenode.net/#dflydev) channel on irc.freenode.net.
+Projects that Use cron-expression
+=================================
+* Part of the [Laravel Framework](https://github.com/laravel/framework/)
+* Available as a [Symfony Bundle - setono/cron-expression-bundle](https://github.com/Setono/CronExpressionBundle)
+* Framework agnostic, PHP-based job scheduler - [Crunz](https://github.com/crunzphp/crunz)
+* Framework agnostic job scheduler - with locks, parallelism, per-second scheduling and more - [orisai/scheduler](https://github.com/orisai/scheduler)
+* Explain expression in English (and other languages) with [orisai/cron-expression-explainer](https://github.com/orisai/cron-expression-explainer)
